@@ -39,12 +39,29 @@ export default function DesertPerpetual(Epic) {
           </div>
         </section>
 
+        {/* Non Linearity Section */}
+        <section className="guide-section">
+          <h2 className="section-title">🌀 Non-Linearity & Exploration</h2>
+          <div className="non-linearity-content">
+            <p>
+              The Desert Perpetual features a non-linear design, allowing fireteams to explore its vast environments in a non-linear fashion. 
+              Players can choose different paths, uncover hidden secrets, and engage in optional encounters.
+            </p>
+            <p><strong>But what does this mean?</strong></p>
+            <p>
+              In practical terms, this means that fireteams can approach encounters in multiple ways. 
+              Some paths may lead to easier fights, while others could provide valuable loot or lore insights.
+            </p>
+            <p><strong>So We can do any encounter?</strong> Exactly! You can chose the order of the encounters that you go through. This meaning that you could choose which encounter you find easiest frist or hardest! Below we will give a recommendation of what order is the easiest to follow.</p>
+          </div>
+        </section>
+
         {/* Encounters Section */}
         <section className="guide-section">
           <h2 className="section-title">⚔️ Encounters</h2>
 
           <div className="encounter-card">
-            <h3 className="encounter-title">Entrance: The Breach</h3>
+            <h3 className="encounter-title">Epoptes , Lord of Quanta</h3>
             <div className="encounter-content">
               <p><strong>Objective:</strong> Break through the Cabal fortifications and establish a foothold in the Desert Perpetual.</p>
               <p><strong>Strategy:</strong> Split into two teams of three. Each team must breach the left and right gates by defeating gatekeepers and dunking energy cores.</p>
@@ -54,7 +71,7 @@ export default function DesertPerpetual(Epic) {
           </div>
 
           <div className="encounter-card">
-            <h3 className="encounter-title">First Encounter: Shifting Sands</h3>
+            <h3 className="encounter-title">Agarios ,  Inherent</h3>
             <div className="encounter-content">
               <p><strong>Objective:</strong> Navigate the temporal maze while managing debuffs and maintaining arena stability.</p>
               <p><strong>Roles:</strong> 2 Runners, 2 Add Clear, 2 Plate Holders</p>
@@ -64,7 +81,7 @@ export default function DesertPerpetual(Epic) {
           </div>
 
           <div className="encounter-card">
-            <h3 className="encounter-title">Second Encounter: The War Council</h3>
+            <h3 className="encounter-title">Iatros , Inward-Turned</h3>
             <div className="encounter-content">
               <p><strong>Objective:</strong> Defeat two Cabal commanders while managing their unique mechanics.</p>
               <p><strong>Strategy:</strong> Split into two teams of three. Each team handles one commander. Both commanders must be defeated within a reasonable time window.</p>
@@ -78,7 +95,7 @@ export default function DesertPerpetual(Epic) {
           </div>
 
           <div className="encounter-card">
-            <h3 className="encounter-title">Final Boss: Dominus Khazul</h3>
+            <h3 className="encounter-title">Koregos , thw Wordline</h3>
             <div className="encounter-content">
               <p><strong>Objective:</strong> Defeat Dominus Khazul and prevent the Desert Perpetual's power from being unleashed.</p>
               
