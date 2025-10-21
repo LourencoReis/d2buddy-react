@@ -6,23 +6,33 @@ const BackgroundWrapper = ({ children }) => {
   
   // Choose background based on current page
   const getBackground = () => {
-    // No background for profile or any guide pages
+    // No background for profile or INDIVIDUAL guide pages (with trailing slash)
     if (location.pathname === '/profile' || 
         location.pathname.startsWith('/raids/') || 
         location.pathname.startsWith('/dungeons/')) {
       return 'none';
     }
+    
+    // Show background for the raids and dungeons LIST pages (no trailing slash)
+    if (location.pathname === '/raids') {
+      return 'url(/images/desertperp.jpg)'; // You can change this to a different image
+    }
+    
+    if (location.pathname === '/dungeons') {
+      return 'url(/images/desertperp.jpg)'; // You can change this to a different image
+    }
+    
     return 'url(/images/desertperp.jpg)'; // Background for all other pages
   };
 
   const getBackgroundColor = () => {
-    // Dark solid color for profile and guide pages
+    // Dark solid color ONLY for profile and INDIVIDUAL guide pages
     if (location.pathname === '/profile' || 
         location.pathname.startsWith('/raids/') || 
         location.pathname.startsWith('/dungeons/')) {
       return '#1a1a1a';
     }
-    return 'transparent'; // Transparent for other pages
+    return 'transparent'; // Transparent for other pages so background image shows
   };
 
   return (

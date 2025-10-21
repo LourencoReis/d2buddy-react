@@ -2,7 +2,7 @@
 
 /* Full page wrapper for guides */
 .page-layout {
-  background-color: #0a0a0a;
+  background-color: transparent; /* Let BackgroundWrapper handle backgrounds */
   min-height: 100vh;
   position: relative;
 }

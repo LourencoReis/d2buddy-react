@@ -3,7 +3,7 @@
 body {
   margin: 0;
   font-family: 'Roboto', Arial, sans-serif;
-  background-color: #1a1a1a;
+  background-color: transparent; /* Let BackgroundWrapper handle backgrounds */
   min-height: 100vh;
 }
 
