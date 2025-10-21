@@ -31,6 +31,16 @@ export default function Duality() {
             </p>
           </div>
         </section>
+        <section className="guide-section">
+          <h2 className="section-title"> Dungeon Start puzzle</h2>
+          <div className="overview-content">
+            <p>
+              In the start of the dungeon the player will fall from a great height into what looks like a dead end.
+              However at the very end of the room that the user can see the through the bars you can see a bell. 
+              <img src="./images/bell.jpg" alt="Bell" />
+            </p>
+          </div>
+        </section>
 
         <section className="guide-section">
           <h2 className="section-title">⚔️ Encounters</h2>
