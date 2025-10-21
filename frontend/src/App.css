@@ -17,6 +17,8 @@ body {
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
   box-shadow: 0 4px 24px rgba(80,60,120,0.4);
+  position: relative;
+  z-index: 100;
 }
 
 .logo {

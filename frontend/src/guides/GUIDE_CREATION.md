@@ -73,8 +73,49 @@ The card will automatically:
 - Link to `/raids/deep-stone-crypt` or `/dungeons/vespers-host`
 - Display your image and title
 
-### Step 5: Add the Image
-Place your background image in `frontend/public/images/` with a descriptive name.
+### Step 5: Add Your Images
+Place your images in `frontend/public/images/` with descriptive names.
+
+**You can customize TWO images per guide:**
+
+1. **Hero Image** (required) - Shows at the top of the page in the title section
+   ```jsx
+   <div className="guide-hero" style={{ backgroundImage: `url(/images/your-hero.jpg)` }}>
+   ```
+
+2. **Full-Page Background** (optional) - Fixed background visible throughout the entire page
+   ```jsx
+   <div className="guide-page-background" style={{ backgroundImage: `url(/images/your-bg.jpg)` }} />
+   ```
+
+**Example - Using both images:**
+```jsx
+export default function MyRaid() {
+  return (
+    <main className="page-layout">
+      {/* Full-page background - stays fixed while scrolling */}
+      <div 
+        className="guide-page-background"
+        style={{ backgroundImage: `url(/images/destiny-stars.jpg)` }}
+      />
+      
+      {/* Hero image - shows in the title section */}
+      <div 
+        className="guide-hero"
+        style={{ backgroundImage: `url(/images/myraid-boss.jpg)` }}
+      >
+        {/* Title content */}
+      </div>
+    </main>
+  );
+}
+```
+
+**Tips:**
+- Hero image should be high-quality and showcase the raid/dungeon
+- Full-page background works best with darker or atmospheric images
+- The system automatically adds a gradient overlay for text readability
+- If you only want one image, just use the hero image (omit guide-page-background)
 
 ## Guide Template Sections
 

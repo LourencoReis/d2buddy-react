@@ -5,6 +5,13 @@ import '../../components/GuideStyles.css';
 export default function CrotasEnd() {
   return (
     <main className="page-layout">
+      {/* Optional: Full-page background image (visible throughout entire page) */}
+      <div 
+        className="guide-page-background"
+        style={{ backgroundImage: `url(/images/desertperp.jpg)` }}
+      />
+      
+      {/* Hero section image (visible at top of page) */}
       <div 
         className="guide-hero"
         style={{ backgroundImage: `url(/images/crotasend.jpg)` }}

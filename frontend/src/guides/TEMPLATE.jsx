@@ -17,10 +17,19 @@ import '../components/GuideStyles.css';
 export default function YourRaidDungeonName() {
   return (
     <main className="page-layout">
-      {/* Hero Section with Background Image */}
+      {/* OPTIONAL: Full-page background image (stays fixed while scrolling) */}
+      {/* Uncomment this section if you want a full-page background */}
+      {/*
+      <div 
+        className="guide-page-background"
+        style={{ backgroundImage: `url(/images/your-full-page-bg.jpg)` }}
+      />
+      */}
+      
+      {/* Hero Section with Background Image (shows at top of page) */}
       <div 
         className="guide-hero"
-        style={{ backgroundImage: `url(/images/your-image.jpg)` }}
+        style={{ backgroundImage: `url(/images/your-hero-image.jpg)` }}
       >
         <div className="guide-hero-overlay">
           <h1 className="guide-title">Your Raid/Dungeon Name</h1>

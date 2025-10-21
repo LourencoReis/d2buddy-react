@@ -7,6 +7,38 @@
   position: relative;
 }
 
+/* Optional full-page background image (fixed, stays in place while scrolling) */
+.guide-page-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  z-index: 0;
+}
+
+/* Gradient overlay to ensure text readability */
+.guide-page-background::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(10, 10, 10, 0.8) 30%,
+    rgba(10, 10, 10, 0.95) 60%,
+    rgba(10, 10, 10, 1) 100%
+  );
+  z-index: 0;
+}
+
+/* Hero section at top of page (can have different image than page background) */
 .guide-hero {
   position: relative;
   height: 50vh;
@@ -17,6 +49,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  z-index: 1;
 }
 
 .guide-hero-overlay {
@@ -50,6 +83,8 @@
   margin: 0 auto;
   padding: 2rem;
   background-color: #0a0a0a;
+  position: relative;
+  z-index: 1;
 }
 
 .guide-section {
