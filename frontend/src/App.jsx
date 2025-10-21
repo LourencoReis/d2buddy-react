@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import BackgroundWrapper from './components/BackgroundWrapper';
 import Header from './components/Header';
 import Home from './pages/Home';
@@ -11,18 +11,6 @@ import AuthCallback from './pages/AuthCallback';
 import BungieAuthCallback from './pages/BungieAuthCallback';
 import './App.css';
 
-// Protected Route component - requires Bungie auth
-function ProtectedRoute({ children }) {
-  const bungieData = localStorage.getItem('bungie_data');
-  
-  if (!bungieData) {
-    // Redirect to home if not logged in with Bungie
-    return <Navigate to="/" replace />;
-  }
-  
-  return children;
-}
-
 function App() {
   return (
     <Router>
@@ -31,15 +19,13 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/raids" element={<Raids />} />
+            <Route path="/raids/:raidSlug" element={<RaidGuide />} />
+            <Route path="/dungeons/:dungeonSlug" element={<RaidGuide />} />
+            <Route path="/dungeons" element={<Dungeons />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/auth/bungie/callback" element={<BungieAuthCallback />} />
-            
-            {/* Protected routes - require Bungie login */}
-            <Route path="/raids" element={<ProtectedRoute><Raids /></ProtectedRoute>} />
-            <Route path="/raids/:raidSlug" element={<ProtectedRoute><RaidGuide /></ProtectedRoute>} />
-            <Route path="/dungeons" element={<ProtectedRoute><Dungeons /></ProtectedRoute>} />
-            <Route path="/dungeons/:dungeonSlug" element={<ProtectedRoute><RaidGuide /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           </Routes>
         </BackgroundWrapper>
       </div>
