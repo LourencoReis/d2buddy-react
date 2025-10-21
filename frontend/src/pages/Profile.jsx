@@ -14,39 +14,41 @@ export default function Profile() {
   const handleBungieConnect = () => {
     const bungieClientId = '50907'; // Your Bungie client ID
     
-    // Use the stable Vercel alias URL
-    const redirectUri = 'https://sherpas-corner.vercel.app/api/auth/bungie/callback';
+    // Use current hostname for redirect (works on any deployment)
+    const currentHost = window.location.origin;
+    const redirectUri = `${currentHost}/api/auth/bungie/callback`;
     
     // Remove scope entirely - some APIs work with default scopes
     const bungieAuthUrl = `https://www.bungie.net/en/oauth/authorize?client_id=${bungieClientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}`;
     
     console.log('Starting Bungie auth with redirect URI:', redirectUri);
+    console.log('Full Bungie auth URL:', bungieAuthUrl);
     window.location.href = bungieAuthUrl;
   };
 
   // Fetch Bungie stats
   const fetchBungieStats = async () => {
-    const bungieData = localStorage.getItem('bungie_data');
-    if (!bungieData) return;
-
-    const data = JSON.parse(bungieData);
-    console.log('Bungie data structure:', data); // Debug log
+    const bungieDataStr = localStorage.getItem('bungie_data');
+    console.log('Raw bungie_data from localStorage:', bungieDataStr);
     
-    // Fix the data structure access
-    if (!data.profile || !data.profile.destinyMemberships) {
-      console.error('No destiny memberships found in data:', data);
+    if (!bungieDataStr) {
+      console.log('No bungie_data found in localStorage');
       return;
     }
 
-    const destinyMembership = data.profile.destinyMemberships[0];
-    if (!destinyMembership) {
-      console.error('No destiny membership found');
-      return;
-    }
-
-    console.log('Fetching stats for membership:', destinyMembership);
-    setLoadingStats(true);
     try {
+      const data = JSON.parse(bungieDataStr);
+      console.log('Parsed Bungie data structure:', data);
+      
+      // Check if we have an access token
+      if (!data.accessToken) {
+        console.error('No accessToken found in bungie_data:', data);
+        return;
+      }
+      
+      console.log('Access token found, fetching stats...');
+      setLoadingStats(true);
+      
       // Use relative URL to ensure it calls the same deployment we're on
       const response = await fetch(`/api/stats-simple`, {
         headers: {
