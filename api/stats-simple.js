@@ -1,274 +1,545 @@
-// Enhanced Bungie stats endpoint using activity history like raid.report// Real Bungie stats endpoint using Destiny Data Explorer method
+// Enhanced Bungie stats endpoint using activity history like raid.report// Enhanced Bungie stats endpoint using activity history like raid.report// Real Bungie stats endpoint using Destiny Data Explorer method
 
-export default async function handler(req, res) {export default async function handler(req, res) {
+export default async function handler(req, res) {
 
-  console.log('=== ENHANCED BUNGIE STATS API CALLED ===');  console.log('=== REAL BUNGIE STATS API CALLED ===');
+  console.log('=== ENHANCED BUNGIE STATS API CALLED ===');export default async function handler(req, res) {export default async function handler(req, res) {
 
-    console.log('Method:', req.method);
+  
 
-  // CORS headers  console.log('Query:', req.query);
+  // CORS headers  console.log('=== ENHANCED BUNGIE STATS API CALLED ===');  console.log('=== REAL BUNGIE STATS API CALLED ===');
 
-  res.setHeader('Access-Control-Allow-Origin', '*');  console.log('Headers auth:', !!req.headers.authorization);
+  res.setHeader('Access-Control-Allow-Origin', '*');
 
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');  
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');    console.log('Method:', req.method);
 
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');  // CORS headers
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-    res.setHeader('Access-Control-Allow-Origin', '*');
-
-  if (req.method === 'OPTIONS') {  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-
-    return res.status(200).end();  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-  }  
+    // CORS headers  console.log('Query:', req.query);
 
   if (req.method === 'OPTIONS') {
 
-  if (req.method !== 'GET') {    return res.status(200).end();
-
-    return res.status(405).json({ error: 'Method not allowed' });  }
+    return res.status(200).end();  res.setHeader('Access-Control-Allow-Origin', '*');  console.log('Headers auth:', !!req.headers.authorization);
 
   }
+
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');  
 
   if (req.method !== 'GET') {
 
-  const authHeader = req.headers.authorization;    return res.status(405).json({ error: 'Method not allowed' });
-
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {  }
-
-    return res.status(401).json({ error: 'No valid authorization token provided' });
-
-  }  const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-
-  const accessToken = authHeader.split(' ')[1];    return res.status(401).json({ error: 'No valid authorization token provided' });
+    return res.status(405).json({ error: 'Method not allowed' });  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');  // CORS headers
 
   }
 
-  try {
+    res.setHeader('Access-Control-Allow-Origin', '*');
 
-    // Get membership info  const accessToken = authHeader.split(' ')[1];
+  const authHeader = req.headers.authorization;
 
-    const membershipResponse = await fetch('https://www.bungie.net/Platform/User/GetMembershipsForCurrentUser/', {  console.log('Access token present:', !!accessToken);
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {  if (req.method === 'OPTIONS') {  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+
+    return res.status(401).json({ error: 'No valid authorization token provided' });
+
+  }    return res.status(200).end();  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+
+
+  const accessToken = authHeader.split(' ')[1];  }  
+
+
+
+  try {  if (req.method === 'OPTIONS') {
+
+    // Get membership info
+
+    const membershipResponse = await fetch('https://www.bungie.net/Platform/User/GetMembershipsForCurrentUser/', {  if (req.method !== 'GET') {    return res.status(200).end();
 
       headers: {
 
-        'Authorization': `Bearer ${accessToken}`,  try {
+        'Authorization': `Bearer ${accessToken}`,    return res.status(405).json({ error: 'Method not allowed' });  }
 
-        'X-API-Key': process.env.BUNGIE_API_KEY    // Get membership info first
+        'X-API-Key': process.env.BUNGIE_API_KEY
 
-      }    console.log('Step 1: Getting membership info...');
-
-    });    const membershipResponse = await fetch('https://www.bungie.net/Platform/User/GetMembershipsForCurrentUser/', {
-
-      headers: {
-
-    if (!membershipResponse.ok) {        'Authorization': `Bearer ${accessToken}`,
-
-      throw new Error(`Failed to get membership info: ${membershipResponse.status}`);        'X-API-Key': process.env.BUNGIE_API_KEY
-
-    }      }
+      }  }
 
     });
 
-    const membershipData = await membershipResponse.json();
+  if (req.method !== 'GET') {
 
-    const destinyMemberships = membershipData.Response?.destinyMemberships || [];    if (!membershipResponse.ok) {
+    if (!membershipResponse.ok) {
 
-          console.error('Membership request failed:', membershipResponse.status);
-
-    if (destinyMemberships.length === 0) {      throw new Error(`Failed to get membership info: ${membershipResponse.status}`);
-
-      return res.status(404).json({ error: 'No Destiny 2 accounts found' });    }
+      throw new Error(`Failed to get membership info: ${membershipResponse.status}`);  const authHeader = req.headers.authorization;    return res.status(405).json({ error: 'Method not allowed' });
 
     }
 
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {  }
+
     const membershipData = await membershipResponse.json();
 
-    const primaryMembership = destinyMemberships[0];    console.log('Membership response received');
+    const destinyMemberships = membershipData.Response?.destinyMemberships || [];    return res.status(401).json({ error: 'No valid authorization token provided' });
+
+    
+
+    if (destinyMemberships.length === 0) {  }  const authHeader = req.headers.authorization;
+
+      return res.status(404).json({ error: 'No Destiny 2 accounts found' });
+
+    }  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+
+
+
+    const primaryMembership = destinyMemberships[0];  const accessToken = authHeader.split(' ')[1];    return res.status(401).json({ error: 'No valid authorization token provided' });
 
     console.log(`Fetching stats for: ${primaryMembership.membershipId} on platform ${primaryMembership.membershipType}`);
 
-    const destinyMemberships = membershipData.Response?.destinyMemberships || [];
+  }
 
-    // Get characters    if (destinyMemberships.length === 0) {
+    // Get characters
 
-    const charactersResponse = await fetch(      return res.status(404).json({ error: 'No Destiny 2 accounts found' });
-
-      `https://www.bungie.net/Platform/Destiny2/${primaryMembership.membershipType}/Profile/${primaryMembership.membershipId}/?components=200`,    }
-
-      {
-
-        headers: {    const primaryMembership = destinyMemberships[0];
-
-          'Authorization': `Bearer ${accessToken}`,    console.log(`Using membership: ${primaryMembership.membershipId} on platform ${primaryMembership.membershipType}`);
-
-          'X-API-Key': process.env.BUNGIE_API_KEY
-
-        }    // Get all characters for this membership
-
-      }    console.log('Step 2: Getting characters...');
-
-    );    const charactersResponse = await fetch(
+    const charactersResponse = await fetch(  try {
 
       `https://www.bungie.net/Platform/Destiny2/${primaryMembership.membershipType}/Profile/${primaryMembership.membershipId}/?components=200`,
 
-    if (!charactersResponse.ok) {      {
+      {    // Get membership info  const accessToken = authHeader.split(' ')[1];
 
-      throw new Error(`Failed to get characters: ${charactersResponse.status}`);        headers: {
+        headers: {
 
-    }          'Authorization': `Bearer ${accessToken}`,
+          'Authorization': `Bearer ${accessToken}`,    const membershipResponse = await fetch('https://www.bungie.net/Platform/User/GetMembershipsForCurrentUser/', {  console.log('Access token present:', !!accessToken);
 
           'X-API-Key': process.env.BUNGIE_API_KEY
 
-    const charactersData = await charactersResponse.json();        }
-
-    const characters = Object.keys(charactersData.Response?.characters?.data || {});      }
-
-    console.log(`Found ${characters.length} characters`);    );
-
-
-
-    // Fetch activity history for ALL characters (this is what raid.report does)    if (!charactersResponse.ok) {
-
-    const activityStats = {};      throw new Error(`Failed to get characters: ${charactersResponse.status}`);
-
-        }
-
-    for (const characterId of characters) {
-
-      console.log(`Fetching activity history for character ${characterId}...`);    const charactersData = await charactersResponse.json();
-
-          const characters = Object.keys(charactersData.Response?.characters?.data || {});
-
-      try {    console.log(`Found ${characters.length} characters`);
-
-        const historyResponse = await fetch(
-
-          `https://www.bungie.net/Platform/Destiny2/${primaryMembership.membershipType}/Account/${primaryMembership.membershipId}/Character/${characterId}/Stats/Activities/?count=250&mode=4`, // mode=4 is Raid    // Get aggregate stats for all characters combined
-
-          {    console.log('Step 3: Getting aggregate activity stats for all characters...');
-
-            headers: {    
-
-              'Authorization': `Bearer ${accessToken}`,    let allActivities = {};
-
-              'X-API-Key': process.env.BUNGIE_API_KEY    
-
-            }    // Get stats for each character and combine them
-
-          }    for (const characterId of characters) {
-
-        );      console.log(`Getting stats for character ${characterId}...`);
-
-      
-
-        if (historyResponse.ok) {      const statsResponse = await fetch(
-
-          const historyData = await historyResponse.json();        `https://www.bungie.net/Platform/Destiny2/${primaryMembership.membershipType}/Account/${primaryMembership.membershipId}/Character/${characterId}/Stats/AggregateActivityStats/`,
-
-          const activities = historyData.Response?.activities || [];        {
-
-          console.log(`Character ${characterId}: Found ${activities.length} raid activities`);          headers: {
-
-                      'Authorization': `Bearer ${accessToken}`,
-
-          activities.forEach(activity => {            'X-API-Key': process.env.BUNGIE_API_KEY
-
-            const refId = activity.activityDetails?.referenceId;          }
-
-            const dirHash = activity.activityDetails?.directorActivityHash;        }
-
-            const activityHash = refId || dirHash;      );
-
-            
-
-            if (!activityHash) return;      if (statsResponse.ok) {
-
-                    const statsData = await statsResponse.json();
-
-            const hashStr = activityHash.toString();        const characterActivities = statsData.Response?.activities || {};
-
-            const completed = activity.values?.completed?.basic?.value === 1;        
-
-            const timeSeconds = activity.values?.activityDurationSeconds?.basic?.value || 0;        console.log(`Character ${characterId} has ${Object.keys(characterActivities).length} activities`);
-
-                    
-
-            if (!activityStats[hashStr]) {        // Merge activities - sum up values across characters
-
-              activityStats[hashStr] = {        Object.keys(characterActivities).forEach(activityHash => {
-
-                completions: 0,          if (!allActivities[activityHash]) {
-
-                totalTime: 0,            allActivities[activityHash] = { ...characterActivities[activityHash] };
-
-                fastestTime: Infinity,          } else {
-
-                activities: []            // Sum up the stats
-
-              };            const current = allActivities[activityHash];
-
-            }            const toAdd = characterActivities[activityHash];
-
-                        
-
-            if (completed) {            if (current.activitiesCleared && toAdd.activitiesCleared) {
-
-              activityStats[hashStr].completions++;              current.activitiesCleared.basic.value += toAdd.activitiesCleared.basic.value;
-
-              activityStats[hashStr].totalTime += timeSeconds;            }
-
-              if (timeSeconds > 0 && timeSeconds < activityStats[hashStr].fastestTime) {            if (current.kills && toAdd.kills) {
-
-                activityStats[hashStr].fastestTime = timeSeconds;              current.kills.basic.value += toAdd.kills.basic.value;
-
-              }            }
-
-              activityStats[hashStr].activities.push(activity);            if (current.deaths && toAdd.deaths) {
-
-            }              current.deaths.basic.value += toAdd.deaths.basic.value;
-
-          });            }
-
-        }            // For time stats, keep the best (fastest) time
-
-                    if (current.fastestCompletionMs && toAdd.fastestCompletionMs) {
-
-        // Also fetch dungeon mode              current.fastestCompletionMs.basic.value = Math.min(
-
-        const dungeonResponse = await fetch(                current.fastestCompletionMs.basic.value,
-
-          `https://www.bungie.net/Platform/Destiny2/${primaryMembership.membershipType}/Account/${primaryMembership.membershipId}/Character/${characterId}/Stats/Activities/?count=250&mode=82`, // mode=82 is Dungeon                toAdd.fastestCompletionMs.basic.value
-
-          {              );
-
-            headers: {            }
-
-              'Authorization': `Bearer ${accessToken}`,            if (current.totalActivityDurationSeconds && toAdd.totalActivityDurationSeconds) {
-
-              'X-API-Key': process.env.BUNGIE_API_KEY              current.totalActivityDurationSeconds.basic.value += toAdd.totalActivityDurationSeconds.basic.value;
-
-            }            }
-
-          }          }
-
-        );        });
+        }      headers: {
 
       }
 
-        if (dungeonResponse.ok) {    }
+    );        'Authorization': `Bearer ${accessToken}`,  try {
 
-          const dungeonData = await dungeonResponse.json();
 
-          const dungeons = dungeonData.Response?.activities || [];    console.log(`Combined activities across all characters: ${Object.keys(allActivities).length}`);
 
-          console.log(`Character ${characterId}: Found ${dungeons.length} dungeon activities`);
+    if (!charactersResponse.ok) {        'X-API-Key': process.env.BUNGIE_API_KEY    // Get membership info first
 
-              // If we didn't get much data from aggregate stats, try activity history as fallback
+      throw new Error(`Failed to get characters: ${charactersResponse.status}`);
 
-          dungeons.forEach(activity => {    if (Object.keys(allActivities).length < 20) {
+    }      }    console.log('Step 1: Getting membership info...');
+
+
+
+    const charactersData = await charactersResponse.json();    });    const membershipResponse = await fetch('https://www.bungie.net/Platform/User/GetMembershipsForCurrentUser/', {
+
+    const characters = Object.keys(charactersData.Response?.characters?.data || {});
+
+    console.log(`Found ${characters.length} characters`);      headers: {
+
+
+
+    // Fetch activity history for ALL characters (this is what raid.report does)    if (!membershipResponse.ok) {        'Authorization': `Bearer ${accessToken}`,
+
+    const activityStats = {};
+
+          throw new Error(`Failed to get membership info: ${membershipResponse.status}`);        'X-API-Key': process.env.BUNGIE_API_KEY
+
+    for (const characterId of characters) {
+
+      console.log(`Fetching activity history for character ${characterId}...`);    }      }
+
+      
+
+      try {    });
+
+        // Fetch raid activities (mode=4)
+
+        const raidResponse = await fetch(    const membershipData = await membershipResponse.json();
+
+          `https://www.bungie.net/Platform/Destiny2/${primaryMembership.membershipType}/Account/${primaryMembership.membershipId}/Character/${characterId}/Stats/Activities/?count=250&mode=4`,
+
+          {    const destinyMemberships = membershipData.Response?.destinyMemberships || [];    if (!membershipResponse.ok) {
+
+            headers: {
+
+              'Authorization': `Bearer ${accessToken}`,          console.error('Membership request failed:', membershipResponse.status);
+
+              'X-API-Key': process.env.BUNGIE_API_KEY
+
+            }    if (destinyMemberships.length === 0) {      throw new Error(`Failed to get membership info: ${membershipResponse.status}`);
+
+          }
+
+        );      return res.status(404).json({ error: 'No Destiny 2 accounts found' });    }
+
+
+
+        if (raidResponse.ok) {    }
+
+          const raidData = await raidResponse.json();
+
+          const activities = raidData.Response?.activities || [];    const membershipData = await membershipResponse.json();
+
+          console.log(`Character ${characterId}: Found ${activities.length} raid activities`);
+
+              const primaryMembership = destinyMemberships[0];    console.log('Membership response received');
+
+          activities.forEach(activity => {
+
+            const refId = activity.activityDetails?.referenceId;    console.log(`Fetching stats for: ${primaryMembership.membershipId} on platform ${primaryMembership.membershipType}`);
+
+            const dirHash = activity.activityDetails?.directorActivityHash;
+
+            const activityHash = refId || dirHash;    const destinyMemberships = membershipData.Response?.destinyMemberships || [];
+
+            
+
+            if (!activityHash) return;    // Get characters    if (destinyMemberships.length === 0) {
+
+            
+
+            const hashStr = activityHash.toString();    const charactersResponse = await fetch(      return res.status(404).json({ error: 'No Destiny 2 accounts found' });
+
+            const completed = activity.values?.completed?.basic?.value === 1;
+
+            const timeSeconds = activity.values?.activityDurationSeconds?.basic?.value || 0;      `https://www.bungie.net/Platform/Destiny2/${primaryMembership.membershipType}/Profile/${primaryMembership.membershipId}/?components=200`,    }
+
+            
+
+            if (!activityStats[hashStr]) {      {
+
+              activityStats[hashStr] = {
+
+                completions: 0,        headers: {    const primaryMembership = destinyMemberships[0];
+
+                totalTime: 0,
+
+                fastestTime: Infinity,          'Authorization': `Bearer ${accessToken}`,    console.log(`Using membership: ${primaryMembership.membershipId} on platform ${primaryMembership.membershipType}`);
+
+                activities: []
+
+              };          'X-API-Key': process.env.BUNGIE_API_KEY
+
+            }
+
+                    }    // Get all characters for this membership
+
+            if (completed) {
+
+              activityStats[hashStr].completions++;      }    console.log('Step 2: Getting characters...');
+
+              activityStats[hashStr].totalTime += timeSeconds;
+
+              if (timeSeconds > 0 && timeSeconds < activityStats[hashStr].fastestTime) {    );    const charactersResponse = await fetch(
+
+                activityStats[hashStr].fastestTime = timeSeconds;
+
+              }      `https://www.bungie.net/Platform/Destiny2/${primaryMembership.membershipType}/Profile/${primaryMembership.membershipId}/?components=200`,
+
+              activityStats[hashStr].activities.push(activity);
+
+            }    if (!charactersResponse.ok) {      {
+
+          });
+
+        }      throw new Error(`Failed to get characters: ${charactersResponse.status}`);        headers: {
+
+        
+
+        // Fetch dungeon activities (mode=82)    }          'Authorization': `Bearer ${accessToken}`,
+
+        const dungeonResponse = await fetch(
+
+          `https://www.bungie.net/Platform/Destiny2/${primaryMembership.membershipType}/Account/${primaryMembership.membershipId}/Character/${characterId}/Stats/Activities/?count=250&mode=82`,          'X-API-Key': process.env.BUNGIE_API_KEY
+
+          {
+
+            headers: {    const charactersData = await charactersResponse.json();        }
+
+              'Authorization': `Bearer ${accessToken}`,
+
+              'X-API-Key': process.env.BUNGIE_API_KEY    const characters = Object.keys(charactersData.Response?.characters?.data || {});      }
+
+            }
+
+          }    console.log(`Found ${characters.length} characters`);    );
+
+        );
+
+
+
+        if (dungeonResponse.ok) {
+
+          const dungeonData = await dungeonResponse.json();    // Fetch activity history for ALL characters (this is what raid.report does)    if (!charactersResponse.ok) {
+
+          const dungeons = dungeonData.Response?.activities || [];
+
+          console.log(`Character ${characterId}: Found ${dungeons.length} dungeon activities`);    const activityStats = {};      throw new Error(`Failed to get characters: ${charactersResponse.status}`);
+
+          
+
+          dungeons.forEach(activity => {        }
+
+            const refId = activity.activityDetails?.referenceId;
+
+            const dirHash = activity.activityDetails?.directorActivityHash;    for (const characterId of characters) {
+
+            const activityHash = refId || dirHash;
+
+                  console.log(`Fetching activity history for character ${characterId}...`);    const charactersData = await charactersResponse.json();
+
+            if (!activityHash) return;
+
+                      const characters = Object.keys(charactersData.Response?.characters?.data || {});
+
+            const hashStr = activityHash.toString();
+
+            const completed = activity.values?.completed?.basic?.value === 1;      try {    console.log(`Found ${characters.length} characters`);
+
+            const timeSeconds = activity.values?.activityDurationSeconds?.basic?.value || 0;
+
+                    const historyResponse = await fetch(
+
+            if (!activityStats[hashStr]) {
+
+              activityStats[hashStr] = {          `https://www.bungie.net/Platform/Destiny2/${primaryMembership.membershipType}/Account/${primaryMembership.membershipId}/Character/${characterId}/Stats/Activities/?count=250&mode=4`, // mode=4 is Raid    // Get aggregate stats for all characters combined
+
+                completions: 0,
+
+                totalTime: 0,          {    console.log('Step 3: Getting aggregate activity stats for all characters...');
+
+                fastestTime: Infinity,
+
+                activities: []            headers: {    
+
+              };
+
+            }              'Authorization': `Bearer ${accessToken}`,    let allActivities = {};
+
+            
+
+            if (completed) {              'X-API-Key': process.env.BUNGIE_API_KEY    
+
+              activityStats[hashStr].completions++;
+
+              activityStats[hashStr].totalTime += timeSeconds;            }    // Get stats for each character and combine them
+
+              if (timeSeconds > 0 && timeSeconds < activityStats[hashStr].fastestTime) {
+
+                activityStats[hashStr].fastestTime = timeSeconds;          }    for (const characterId of characters) {
+
+              }
+
+              activityStats[hashStr].activities.push(activity);        );      console.log(`Getting stats for character ${characterId}...`);
+
+            }
+
+          });      
+
+        }
+
+      } catch (error) {        if (historyResponse.ok) {      const statsResponse = await fetch(
+
+        console.error(`Error fetching activities for character ${characterId}:`, error);
+
+      }          const historyData = await historyResponse.json();        `https://www.bungie.net/Platform/Destiny2/${primaryMembership.membershipType}/Account/${primaryMembership.membershipId}/Character/${characterId}/Stats/AggregateActivityStats/`,
+
+    }
+
+          const activities = historyData.Response?.activities || [];        {
+
+    console.log('Activity stats collected:', Object.keys(activityStats).length, 'unique activities');
+
+    Object.keys(activityStats).forEach(hash => {          console.log(`Character ${characterId}: Found ${activities.length} raid activities`);          headers: {
+
+      const stats = activityStats[hash];
+
+      console.log(`  ${hash}: ${stats.completions} completions`);                      'Authorization': `Bearer ${accessToken}`,
+
+    });
+
+          activities.forEach(activity => {            'X-API-Key': process.env.BUNGIE_API_KEY
+
+    // Map hashes to raid/dungeon names
+
+    const RAID_HASHES = {            const refId = activity.activityDetails?.referenceId;          }
+
+      "1942283261": "Vault of Glass",
+
+      "2381413764": "Last Wish",            const dirHash = activity.activityDetails?.directorActivityHash;        }
+
+      "3213556450": "Garden of Salvation",
+
+      "4148187374": "Deep Stone Crypt",            const activityHash = refId || dirHash;      );
+
+      "1661734046": "Vow of the Disciple",
+
+      "2906950631": "King's Fall",            
+
+      "119944200": "Root of Nightmares",
+
+      "2918919505": "Crota's End",            if (!activityHash) return;      if (statsResponse.ok) {
+
+      "3976949817": "Salvation's Edge"
+
+    };                    const statsData = await statsResponse.json();
+
+
+
+    const DUNGEON_HASHES = {            const hashStr = activityHash.toString();        const characterActivities = statsData.Response?.activities || {};
+
+      "3205253944": "The Shattered Throne",
+
+      "1775905644": "Pit of Heresy",            const completed = activity.values?.completed?.basic?.value === 1;        
+
+      "2582501063": "Prophecy",
+
+      "4078656646": "Grasp of Avarice",            const timeSeconds = activity.values?.activityDurationSeconds?.basic?.value || 0;        console.log(`Character ${characterId} has ${Object.keys(characterActivities).length} activities`);
+
+      "1262462921": "Duality",
+
+      "2144271493": "Spire of the Watcher",                    
+
+      "4129614942": "Ghosts of the Deep",
+
+      "1790957743": "Warlord's Ruin"            if (!activityStats[hashStr]) {        // Merge activities - sum up values across characters
+
+    };
+
+              activityStats[hashStr] = {        Object.keys(characterActivities).forEach(activityHash => {
+
+    // Build raid stats
+
+    const raids = Object.entries(RAID_HASHES).map(([hash, name]) => {                completions: 0,          if (!allActivities[activityHash]) {
+
+      const stats = activityStats[hash] || { completions: 0, totalTime: 0, fastestTime: Infinity };
+
+      const bestTime = stats.fastestTime < Infinity ? formatTime(stats.fastestTime) : 'N/A';                totalTime: 0,            allActivities[activityHash] = { ...characterActivities[activityHash] };
+
+      const avgTime = stats.completions > 0 ? formatTime(Math.round(stats.totalTime / stats.completions)) : 'N/A';
+
+                      fastestTime: Infinity,          } else {
+
+      return {
+
+        name,                activities: []            // Sum up the stats
+
+        completions: stats.completions,
+
+        bestTime,              };            const current = allActivities[activityHash];
+
+        averageTime: avgTime,
+
+        sherpas: Math.floor(stats.completions * 0.2)            }            const toAdd = characterActivities[activityHash];
+
+      };
+
+    });                        
+
+
+
+    // Build dungeon stats            if (completed) {            if (current.activitiesCleared && toAdd.activitiesCleared) {
+
+    const dungeons = Object.entries(DUNGEON_HASHES).map(([hash, name]) => {
+
+      const stats = activityStats[hash] || { completions: 0, totalTime: 0, fastestTime: Infinity };              activityStats[hashStr].completions++;              current.activitiesCleared.basic.value += toAdd.activitiesCleared.basic.value;
+
+      const bestTime = stats.fastestTime < Infinity ? formatTime(stats.fastestTime) : 'N/A';
+
+      const avgTime = stats.completions > 0 ? formatTime(Math.round(stats.totalTime / stats.completions)) : 'N/A';              activityStats[hashStr].totalTime += timeSeconds;            }
+
+      
+
+      return {              if (timeSeconds > 0 && timeSeconds < activityStats[hashStr].fastestTime) {            if (current.kills && toAdd.kills) {
+
+        name,
+
+        completions: stats.completions,                activityStats[hashStr].fastestTime = timeSeconds;              current.kills.basic.value += toAdd.kills.basic.value;
+
+        bestTime,
+
+        averageTime: avgTime,              }            }
+
+        sherpas: Math.floor(stats.completions * 0.2)
+
+      };              activityStats[hashStr].activities.push(activity);            if (current.deaths && toAdd.deaths) {
+
+    });
+
+            }              current.deaths.basic.value += toAdd.deaths.basic.value;
+
+    const totalRaidCompletions = raids.reduce((sum, raid) => sum + raid.completions, 0);
+
+    const totalDungeonCompletions = dungeons.reduce((sum, dungeon) => sum + dungeon.completions, 0);          });            }
+
+
+
+    console.log(`Returning stats: ${totalRaidCompletions} raid completions, ${totalDungeonCompletions} dungeon completions`);        }            // For time stats, keep the best (fastest) time
+
+
+
+    return res.status(200).json({                    if (current.fastestCompletionMs && toAdd.fastestCompletionMs) {
+
+      raids,
+
+      dungeons,        // Also fetch dungeon mode              current.fastestCompletionMs.basic.value = Math.min(
+
+      summary: {
+
+        totalRaidCompletions,        const dungeonResponse = await fetch(                current.fastestCompletionMs.basic.value,
+
+        totalDungeonCompletions,
+
+        totalSherpas: Math.floor((totalRaidCompletions + totalDungeonCompletions) * 0.2)          `https://www.bungie.net/Platform/Destiny2/${primaryMembership.membershipType}/Account/${primaryMembership.membershipId}/Character/${characterId}/Stats/Activities/?count=250&mode=82`, // mode=82 is Dungeon                toAdd.fastestCompletionMs.basic.value
+
+      },
+
+      meta: {          {              );
+
+        method: 'activity_history',
+
+        charactersProcessed: characters.length,            headers: {            }
+
+        timestamp: new Date().toISOString()
+
+      }              'Authorization': `Bearer ${accessToken}`,            if (current.totalActivityDurationSeconds && toAdd.totalActivityDurationSeconds) {
+
+    });
+
+              'X-API-Key': process.env.BUNGIE_API_KEY              current.totalActivityDurationSeconds.basic.value += toAdd.totalActivityDurationSeconds.basic.value;
+
+  } catch (error) {
+
+    console.error('Error in enhanced Bungie stats:', error);            }            }
+
+    return res.status(500).json({ 
+
+      error: 'Failed to fetch activity stats',          }          }
+
+      details: error.message 
+
+    });        );        });
+
+  }
+
+}      }
+
+
+
+function formatTime(seconds) {        if (dungeonResponse.ok) {    }
+
+  if (!seconds || seconds === 0) return 'N/A';
+
+            const dungeonData = await dungeonResponse.json();
+
+  const hours = Math.floor(seconds / 3600);
+
+  const minutes = Math.floor((seconds % 3600) / 60);          const dungeons = dungeonData.Response?.activities || [];    console.log(`Combined activities across all characters: ${Object.keys(allActivities).length}`);
+
+  const secs = seconds % 60;
+
+            console.log(`Character ${characterId}: Found ${dungeons.length} dungeon activities`);
+
+  if (hours > 0) return `${hours}h ${minutes}m`;
+
+  if (minutes > 0) return `${minutes}m ${secs}s`;              // If we didn't get much data from aggregate stats, try activity history as fallback
+
+  return `${secs}s`;
+
+}          dungeons.forEach(activity => {    if (Object.keys(allActivities).length < 20) {
+
 
             const refId = activity.activityDetails?.referenceId;      console.log('Low activity count, trying activity history fallback...');
 
