@@ -21,6 +21,7 @@ import Duality from './dungeons/Duality';
 import GraspOfAvarice from './dungeons/GraspOfAvarice';
 import Prophecy from './dungeons/Prophecy';
 import ShatteredThrone from './dungeons/ShatteredThrone';
+import SunderedDoctrine from './dungeons/SunderedDoctrine';
 
 // Raid guide mappings
 export const raidGuides = {
@@ -167,6 +168,13 @@ export const dungeonGuides = {
     subtitle: 'Dreaming City\'s First Dungeon',
     lore: `The Shattered Throne is a manifestation of Mara Sov's throne world within the Dreaming City. This realm between realities has been corrupted by Taken forces.`,
     backgroundImage: '/images/desertperp.jpg'
+  },
+  'the-sundered-doctrine': {
+    component: SunderedDoctrine,
+    title: 'The Sundered Doctrine',
+    subtitle: 'Echoes of Collapse',
+    lore: `Hidden deep within the ruins of the Old Tower lies the Sundered Doctrine, a forgotten vault where the Consensus once stored their most dangerous secrets. Now, a rogue faction of Fallen seeks the forbidden technology sealed within.`,
+    backgroundImage: '/images/sundered-doctrine.jpg'
   }
 };
 

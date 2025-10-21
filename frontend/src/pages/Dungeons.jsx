@@ -16,6 +16,7 @@ export default function Dungeons() {
           <DungeonCard title="Prophecy" image="/images/prophecy.jpg" slug="prophecy" />
           <DungeonCard title="Pit of Heresy" image="/images/pit.jpg" slug="pit-of-heresy" />
           <DungeonCard title="The Shattered Throne" image="/images/shattered.jpg" slug="the-shattered-throne" />
+          <DungeonCard title="The Sundered Doctrine" image="/images/sundered-doctrine.jpg" slug="the-sundered-doctrine" />
         </div>
       </div>
     </main>
