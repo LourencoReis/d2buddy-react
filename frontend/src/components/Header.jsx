@@ -23,6 +23,9 @@ export default function Header() {
   const handleLogout = () => {
     localStorage.removeItem('discord_user');
     localStorage.removeItem('discord_token');
+    // Also clear Bungie data when logging out of Discord
+    localStorage.removeItem('bungie_data');
+    localStorage.removeItem('bungie_token');
     setIsLoggedIn(false);
     setUser(null);
     setShowDropdown(false);
