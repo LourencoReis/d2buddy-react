@@ -2,7 +2,7 @@ import React from "react";
 import PlayerStats from "../../components/PlayerStats";
 import '../../components/GuideStyles.css';
 
-export default function DesertPerpetual() {
+export default function DesertPerpetual(Epic) {
   return (
     <main className="page-layout">
       <div 
@@ -20,7 +20,7 @@ export default function DesertPerpetual() {
         <PlayerStats 
           activityType="raid"
           activityName="Desert Perpetual"
-          activitySlug="desert-perpetual"
+          activitySlug="desert-perpetual-(epic)"
         />
 
         {/* Lore Section */}

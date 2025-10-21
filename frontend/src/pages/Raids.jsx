@@ -7,8 +7,8 @@ export default function Raids() {
       <h1 className="page-title">Destiny 2 Raid Guides</h1>
       <div className="sidebar-layout">
         <div className="card-sidebar">
+          <RaidCard title="Desert Perpetual(Epic)" image="/images/epicdesertperp.jpg" />
           <RaidCard title="Desert Perpetual" image="/images/desertperp.jpg" />
-          <RaidCard title="Desert Perpetual (Epic)" image="/images/desertperp.jpg" />
           <RaidCard title="Salvation's Edge" image="/images/salvationsedge.jpg" />
           <RaidCard title="Crota's End" image="/images/crotasend.jpg" />
           <RaidCard title="Root of Nightmares" image="/images/rootofnightmares.jpg" />
