@@ -123,6 +123,19 @@ export default function Profile() {
         <div className="profile-info">
           <h1>{user.username}</h1>
           
+          {/* Display Bungie Name if connected */}
+          {bungieData && (bungieData.profile?.bungieGlobalDisplayName || bungieData.profile?.displayName) && (
+            <p style={{
+              color: '#0d7377',
+              fontSize: '1.2rem',
+              fontWeight: '500',
+              margin: '0.5rem 0 1rem 0'
+            }}>
+              🎮 {bungieData.profile?.bungieGlobalDisplayName || bungieData.profile?.displayName}
+              {bungieData.profile?.bungieGlobalDisplayNameCode && `#${bungieData.profile.bungieGlobalDisplayNameCode}`}
+            </p>
+          )}
+          
           {/* Bungie Connection Status */}
           {!bungieData ? (
             <div className="bungie-connection">
@@ -147,7 +160,6 @@ export default function Profile() {
           ) : (
             <div className="bungie-connected">
               <p className="connection-status">✅ Bungie.net connected</p>
-              <p className="guardian-info">Guardian: {bungieData.profile?.bungieGlobalDisplayName || bungieData.profile?.displayName || 'Unknown'}</p>
               <button 
                 className="logout-bungie-button"
                 onClick={() => {
