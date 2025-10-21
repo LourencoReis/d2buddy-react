@@ -1,32 +1,73 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import "../components/PlayerStats.css";
 
 export default function Profile() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [bungieData, setBungieData] = useState(null);
+  const [bungieStats, setBungieStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingStats, setLoadingStats] = useState(false);
 
-  // Mock data for raid and dungeon stats (you can replace this with real data later)
-  const mockStats = {
-    raids: [
-      { name: "Last Wish", completions: 47, bestTime: "1h 23m", difficulty: "Master" },
-      { name: "Garden of Salvation", completions: 23, bestTime: "1h 45m", difficulty: "Normal" },
-      { name: "Deep Stone Crypt", completions: 156, bestTime: "52m", difficulty: "Master" },
-      { name: "Vault of Glass", completions: 89, bestTime: "1h 12m", difficulty: "Master" },
-      { name: "Vow of the Disciple", completions: 34, bestTime: "1h 35m", difficulty: "Normal" },
-      { name: "King's Fall", completions: 67, bestTime: "1h 28m", difficulty: "Master" }
-    ],
-    dungeons: [
-      { name: "Shattered Throne", completions: 78, bestTime: "15m 32s", difficulty: "Master" },
-      { name: "Pit of Heresy", completions: 134, bestTime: "12m 45s", difficulty: "Master" },
-      { name: "Prophecy", completions: 92, bestTime: "18m 23s", difficulty: "Master" },
-      { name: "Grasp of Avarice", completions: 56, bestTime: "14m 12s", difficulty: "Master" },
-      { name: "Duality", completions: 29, bestTime: "22m 56s", difficulty: "Normal" },
-      { name: "Spire of the Watcher", completions: 41, bestTime: "16m 34s", difficulty: "Master" }
-    ],
-    totalHours: 847,
-    favoriteClass: "Hunter",
-    joinDate: "September 2019"
+  // Handle Bungie.net connection
+  const handleBungieConnect = () => {
+    const bungieClientId = '50907'; // Your Bungie client ID
+    
+    // Use the stable Vercel alias URL
+    const redirectUri = 'https://sherpas-corner.vercel.app/api/auth/bungie/callback';
+    
+    // Remove scope entirely - some APIs work with default scopes
+    const bungieAuthUrl = `https://www.bungie.net/en/oauth/authorize?client_id=${bungieClientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}`;
+    
+    console.log('Starting Bungie auth with redirect URI:', redirectUri);
+    window.location.href = bungieAuthUrl;
+  };
+
+  // Fetch Bungie stats
+  const fetchBungieStats = async () => {
+    const bungieData = localStorage.getItem('bungie_data');
+    if (!bungieData) return;
+
+    const data = JSON.parse(bungieData);
+    console.log('Bungie data structure:', data); // Debug log
+    
+    // Fix the data structure access
+    if (!data.profile || !data.profile.destinyMemberships) {
+      console.error('No destiny memberships found in data:', data);
+      return;
+    }
+
+    const destinyMembership = data.profile.destinyMemberships[0];
+    if (!destinyMembership) {
+      console.error('No destiny membership found');
+      return;
+    }
+
+    console.log('Fetching stats for membership:', destinyMembership);
+    setLoadingStats(true);
+    try {
+      // Use relative URL to ensure it calls the same deployment we're on
+      const response = await fetch(`/api/stats-simple`, {
+        headers: {
+          'Authorization': `Bearer ${data.accessToken}`,
+        },
+      });
+
+      console.log('Stats API response status:', response.status);
+      if (response.ok) {
+        const stats = await response.json();
+        console.log('Received stats:', stats);
+        setBungieStats(stats);
+      } else {
+        const errorText = await response.text();
+        console.error('Stats API error:', response.status, errorText);
+      }
+    } catch (error) {
+      console.error('Error fetching Bungie stats:', error);
+    } finally {
+      setLoadingStats(false);
+    }
   };
 
   useEffect(() => {
@@ -38,8 +79,24 @@ export default function Profile() {
     }
     
     setUser(JSON.parse(userData));
+    
+    // Check if Bungie data exists
+    const bungieData = localStorage.getItem('bungie_data');
+    if (bungieData) {
+      setBungieData(JSON.parse(bungieData));
+      // Fetch fresh stats when component loads
+      setTimeout(fetchBungieStats, 100);
+    }
+    
     setLoading(false);
   }, [navigate]);
+
+  // Refresh stats when Bungie data changes
+  useEffect(() => {
+    if (bungieData) {
+      fetchBungieStats();
+    }
+  }, [bungieData]);
 
   if (loading) {
     return (
@@ -65,67 +122,135 @@ export default function Profile() {
         </div>
         <div className="profile-info">
           <h1>{user.username}</h1>
-          <p className="guardian-info">Guardian since {mockStats.joinDate}</p>
-          <p className="class-info">Main Class: {mockStats.favoriteClass}</p>
-          <p className="hours-info">{mockStats.totalHours} hours played</p>
+          
+          {/* Bungie Connection Status */}
+          {!bungieData ? (
+            <div className="bungie-connection">
+              <p className="connection-status">🔗 Connect your Bungie.net account to view your real Destiny 2 stats</p>
+              <button 
+                className="bungie-connect-btn" 
+                onClick={handleBungieConnect}
+                style={{
+                  background: '#0d7377',
+                  color: 'white',
+                  border: 'none',
+                  padding: '12px 24px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  marginTop: '10px',
+                  fontSize: '16px'
+                }}
+              >
+                Connect Bungie.net
+              </button>
+            </div>
+          ) : (
+            <div className="bungie-connected">
+              <p className="connection-status">✅ Bungie.net connected</p>
+              <p className="guardian-info">Guardian: {bungieData.profile?.bungieGlobalDisplayName || bungieData.profile?.displayName || 'Unknown'}</p>
+              <button 
+                className="logout-bungie-button"
+                onClick={() => {
+                  localStorage.removeItem('bungie_data');
+                  localStorage.removeItem('bungie_token');
+                  setBungieData(null);
+                  setBungieStats(null);
+                }}
+              >
+                Disconnect Bungie.net
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="stats-container">
-        <div className="stats-section">
-          <h2>Raid Statistics</h2>
-          <div className="stats-grid">
-            {mockStats.raids.map((raid, index) => (
-              <div key={index} className="stat-card">
-                <h3>{raid.name}</h3>
-                <div className="stat-details">
-                  <div className="stat-item">
-                    <span className="stat-label">Completions:</span>
-                    <span className="stat-value">{raid.completions}</span>
+      {/* Stats Section */}
+      {bungieStats ? (
+        <div className="stats-container">
+          <div className="stats-section">
+            <h2>Raid Statistics</h2>
+            {loadingStats ? (
+              <div className="loading-stats">Loading real raid stats...</div>
+            ) : bungieStats.raids.length > 0 ? (
+              <div className="stats-grid">
+                {bungieStats.raids.map((raid, index) => (
+                  <div key={index} className="stat-card">
+                    <h3>{raid.name}</h3>
+                    <div className="stat-details">
+                      <div className="stat-item">
+                        <span className="stat-label">Completions:</span>
+                        <span className="stat-value">{raid.completions}</span>
+                      </div>
+                      <div className="stat-item">
+                        <span className="stat-label">Best Time:</span>
+                        <span className="stat-value">{raid.bestTime}</span>
+                      </div>
+                      <div className="stat-item">
+                        <span className="stat-label">Sherpas:</span>
+                        <span className="stat-value sherpa-count">{raid.sherpas}</span>
+                      </div>
+                      {raid.bossDamageText && (
+                        <div className="stat-item boss-damage">
+                          <span className="boss-damage-text">{raid.bossDamageText}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="stat-item">
-                    <span className="stat-label">Best Time:</span>
-                    <span className="stat-value">{raid.bestTime}</span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-label">Difficulty:</span>
-                    <span className={`stat-value ${raid.difficulty.toLowerCase()}`}>
-                      {raid.difficulty}
-                    </span>
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
+            ) : (
+              <div className="no-stats">No raid completions found. Time to start raiding!</div>
+            )}
           </div>
-        </div>
 
-        <div className="stats-section">
-          <h2>Dungeon Statistics</h2>
-          <div className="stats-grid">
-            {mockStats.dungeons.map((dungeon, index) => (
-              <div key={index} className="stat-card">
-                <h3>{dungeon.name}</h3>
-                <div className="stat-details">
-                  <div className="stat-item">
-                    <span className="stat-label">Completions:</span>
-                    <span className="stat-value">{dungeon.completions}</span>
+          <div className="stats-section">
+            <h2>Dungeon Statistics</h2>
+            {loadingStats ? (
+              <div className="loading-stats">Loading real dungeon stats...</div>
+            ) : bungieStats.dungeons.length > 0 ? (
+              <div className="stats-grid">
+                {bungieStats.dungeons.map((dungeon, index) => (
+                  <div key={index} className="stat-card">
+                    <h3>{dungeon.name}</h3>
+                    <div className="stat-details">
+                      <div className="stat-item">
+                        <span className="stat-label">Completions:</span>
+                        <span className="stat-value">{dungeon.completions}</span>
+                      </div>
+                      <div className="stat-item">
+                        <span className="stat-label">Best Time:</span>
+                        <span className="stat-value">{dungeon.bestTime}</span>
+                      </div>
+                      <div className="stat-item">
+                        <span className="stat-label">Sherpas:</span>
+                        <span className="stat-value sherpa-count">{dungeon.sherpas}</span>
+                      </div>
+                      {dungeon.bossDamageText && (
+                        <div className="stat-item boss-damage">
+                          <span className="boss-damage-text">{dungeon.bossDamageText}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className="stat-item">
-                    <span className="stat-label">Best Time:</span>
-                    <span className="stat-value">{dungeon.bestTime}</span>
-                  </div>
-                  <div className="stat-item">
-                    <span className="stat-label">Difficulty:</span>
-                    <span className={`stat-value ${dungeon.difficulty.toLowerCase()}`}>
-                      {dungeon.difficulty}
-                    </span>
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
+            ) : (
+              <div className="no-stats">No dungeon completions found. Time to start exploring!</div>
+            )}
           </div>
         </div>
-      </div>
+      ) : bungieData ? (
+        <div className="stats-container">
+          <div className="loading-stats">Loading your Guardian stats...</div>
+        </div>
+      ) : (
+        <div className="stats-container">
+          <div className="connect-prompt">
+            <h2>Connect Bungie.net to see your real stats!</h2>
+            <p>View your actual raid completions, dungeon times, and Sherpa runs directly from your Destiny 2 account.</p>
+          </div>
+        </div>
+      )}
     </div>
-  );
+  ); 
 }

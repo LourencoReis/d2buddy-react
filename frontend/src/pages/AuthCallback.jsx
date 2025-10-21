@@ -27,8 +27,16 @@ export default function AuthCallback() {
       try {
         setStatus('🔄 Exchanging authorization code...');
         
+        console.log('Sending code to backend:', code);
+        
         // Send the code to our backend for token exchange
-        const response = await fetch('http://localhost:3001/api/auth/discord', {
+        const apiUrl = process.env.NODE_ENV === 'production' 
+          ? '/api/auth/discord' // Back to direct Discord endpoint
+          : 'http://localhost:3001/api/auth/discord';
+          
+        console.log('Making request to:', apiUrl);
+        
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -36,9 +44,22 @@ export default function AuthCallback() {
           body: JSON.stringify({ code }),
         });
 
+        console.log('Response status:', response.status);
+        console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+        
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const textResponse = await response.text();
+          console.error('Non-JSON response received:', textResponse);
+          throw new Error(`Server returned non-JSON response: ${response.status} ${response.statusText}`);
+        }
+
         const data = await response.json();
+        console.log('Backend response:', data);
 
         if (!response.ok) {
+          console.error('Backend error response:', data);
           throw new Error(data.error || 'Authentication failed');
         }
 

@@ -7,10 +7,15 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [dropdownTimeout, setDropdownTimeout] = useState(null);
   
   const handleDiscordLogin = () => {
-    // Your actual Discord OAuth URL
-    const discordOAuthUrl = 'https://discord.com/oauth2/authorize?client_id=1425552201828401304&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fcallback&scope=identify+email';
+    // Dynamic Discord OAuth URL based on environment
+    const baseUrl = process.env.NODE_ENV === 'production' 
+      ? 'https://sherpas-corner.vercel.app'
+      : 'http://localhost:3000';
+    
+    const discordOAuthUrl = `https://discord.com/oauth2/authorize?client_id=1425552201828401304&response_type=code&redirect_uri=${encodeURIComponent(baseUrl + '/auth/callback')}&scope=identify+email`;
     
     window.location.href = discordOAuthUrl;
   };
@@ -28,6 +33,21 @@ export default function Header() {
     setShowDropdown(false);
   };
 
+  const handleMouseEnter = () => {
+    if (dropdownTimeout) {
+      clearTimeout(dropdownTimeout);
+      setDropdownTimeout(null);
+    }
+    setShowDropdown(true);
+  };
+
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setShowDropdown(false);
+    }, 300); // 300ms delay before hiding
+    setDropdownTimeout(timeout);
+  };
+
   useEffect(() => {
     // Check if user is logged in
     const userData = localStorage.getItem('discord_user');
@@ -39,12 +59,12 @@ export default function Header() {
   
   return (
     <header className="header-bar">
-      <div className="logo">D2Buddy<span className="dot">.</span></div>
+      <div className="logo">Sherpa's Corner<span className="dot">.</span></div>
       <nav className="nav-links">
         {location.pathname !== "/" && (
           <Link to="/" className="cta-btn purple">Home</Link>
         )}
-        {/* Hide Raids and Dungeons buttons on home page */}
+        {/* Hide Raids and Dungeons buttons on home page and current page */}
         {location.pathname !== "/" && location.pathname !== "/raids" && (
           <Link to="/raids" className="cta-btn purple">Raids</Link>
         )}
@@ -63,8 +83,8 @@ export default function Header() {
         ) : (
           <div 
             className="user-profile"
-            onMouseEnter={() => setShowDropdown(true)}
-            onMouseLeave={() => setShowDropdown(false)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
           >
             <div className="user-info" onClick={handleProfileClick}>
               <img 
@@ -75,10 +95,11 @@ export default function Header() {
               <span className="username">{user?.username}</span>
             </div>
             {showDropdown && (
-              <div className="dropdown-menu">
-                <button onClick={handleProfileClick} className="dropdown-item">
-                  View Profile
-                </button>
+              <div 
+                className="dropdown-menu"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
                 <button onClick={handleLogout} className="dropdown-item logout">
                   Logout
                 </button>

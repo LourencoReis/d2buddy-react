@@ -15,18 +15,23 @@ app.use(express.json());
 
 // Discord OAuth configuration
 const DISCORD_CLIENT_ID = '1425552201828401304';
-const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET; // You'll need to add this to .env
+const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || 'tD9SuQwhhJzP3LEN1ymJel8iIJUerMQe';
 const DISCORD_REDIRECT_URI = 'http://localhost:3000/auth/callback';
 
 // Exchange authorization code for access token
 app.post('/api/auth/discord', async (req, res) => {
   const { code } = req.body;
+  
+  console.log('Received Discord auth request with code:', code);
 
   if (!code) {
+    console.log('Error: No authorization code provided');
     return res.status(400).json({ error: 'Authorization code is required' });
   }
 
   try {
+    console.log('Attempting to exchange code for access token...');
+    
     // Exchange code for access token
     const tokenResponse = await axios.post('https://discord.com/api/oauth2/token', 
       new URLSearchParams({
@@ -43,9 +48,11 @@ app.post('/api/auth/discord', async (req, res) => {
       }
     );
 
+    console.log('Successfully got access token');
     const { access_token } = tokenResponse.data;
 
     // Get user information from Discord
+    console.log('Fetching user information from Discord...');
     const userResponse = await axios.get('https://discord.com/api/users/@me', {
       headers: {
         Authorization: `Bearer ${access_token}`,
@@ -53,6 +60,7 @@ app.post('/api/auth/discord', async (req, res) => {
     });
 
     const userData = userResponse.data;
+    console.log('Successfully got user data:', userData.username);
 
     // Return user data (in production, you'd store this in a database)
     res.json({

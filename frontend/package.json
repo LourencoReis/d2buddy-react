@@ -1,7 +1,7 @@
 {
-  "name": "game-hub-frontend",
+  "name": "sherpas-corner-frontend",
   "version": "1.0.0",
-  "description": "A React app for raids and dungeons",
+  "description": "Sherpa's Corner - A React app for Destiny 2 raid and dungeon sherpa tracking",
   "main": "src/index.js",
   "scripts": {
     "start": "react-scripts start",

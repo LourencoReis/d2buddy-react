@@ -28,7 +28,9 @@ export default function Home() {
           </div>
         </div>
         <div className="feature-card-home bottom-card">
-          <div className="feature-icon">🎯</div>
+          <div className="feature-icon">
+            <img src="/images/raidicon.jpg" alt="Crown" className="home-crown-icon" />
+          </div>
           <div>
             <h3>Perfect Builds</h3>
             <p>Tips to fine-tune your loadout for every activity.</p>
