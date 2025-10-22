@@ -49,24 +49,45 @@ export default function Profile() {
       console.log('Access token found, fetching stats...');
       setLoadingStats(true);
       
-      // Use relative URL to ensure it calls the same deployment we're on
-      const response = await fetch(`/api/stats-simple`, {
-        headers: {
-          'Authorization': `Bearer ${data.accessToken}`,
-        },
-      });
+      // Set a timeout for the stats fetch
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+        console.warn('Stats fetch timed out after 9 seconds');
+        setLoadingStats(false);
+      }, 9000);
+      
+      try {
+        // Use relative URL to ensure it calls the same deployment we're on
+        const response = await fetch(`/api/stats-simple`, {
+          headers: {
+            'Authorization': `Bearer ${data.accessToken}`,
+          },
+          signal: controller.signal
+        });
 
-      console.log('Stats API response status:', response.status);
-      if (response.ok) {
-        const stats = await response.json();
-        console.log('Received stats:', stats);
-        setBungieStats(stats);
-      } else {
-        const errorText = await response.text();
-        console.error('Stats API error:', response.status, errorText);
+        clearTimeout(timeoutId);
+        
+        console.log('Stats API response status:', response.status);
+        if (response.ok) {
+          const stats = await response.json();
+          console.log('Received stats:', stats);
+          setBungieStats(stats);
+        } else {
+          const errorText = await response.text();
+          console.error('Stats API error:', response.status, errorText);
+          // Don't throw - just log the error and continue
+        }
+      } catch (fetchError) {
+        clearTimeout(timeoutId);
+        if (fetchError.name === 'AbortError') {
+          console.warn('Stats fetch was aborted due to timeout');
+        } else {
+          console.error('Error fetching Bungie stats:', fetchError);
+        }
       }
     } catch (error) {
-      console.error('Error fetching Bungie stats:', error);
+      console.error('Error parsing bungie data:', error);
     } finally {
       setLoadingStats(false);
     }
@@ -255,7 +276,29 @@ export default function Profile() {
         </div>
       ) : bungieData ? (
         <div className="stats-container">
-          <div className="loading-stats">Loading your Guardian stats...</div>
+          {loadingStats ? (
+            <div className="loading-stats">⏳ Loading your Guardian stats from Bungie API...</div>
+          ) : (
+            <div className="connect-prompt">
+              <h2>Stats Temporarily Unavailable</h2>
+              <p>The Bungie API is taking longer than expected to respond. Your account is connected, but stats couldn't be loaded at this time.</p>
+              <button 
+                onClick={fetchBungieStats}
+                style={{
+                  background: '#0d7377',
+                  color: 'white',
+                  border: 'none',
+                  padding: '12px 24px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  marginTop: '10px',
+                  fontSize: '16px'
+                }}
+              >
+                🔄 Retry Loading Stats
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <div className="stats-container">
