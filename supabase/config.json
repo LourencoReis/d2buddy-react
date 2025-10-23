@@ -1,0 +1,40 @@
+{
+  "configVersion": "1.0.0",
+  "deployment": {
+    "frontend": {
+      "platform": "Vercel",
+      "environmentVariables": {
+        "REACT_APP_API_BASE": "https://YOUR_PROJECT_REF.supabase.co/functions/v1"
+      }
+    },
+    "backend": {
+      "platform": "Supabase Edge Functions",
+      "functions": [
+        {
+          "name": "bungie-stats",
+          "path": "supabase/functions/bungie-stats",
+          "url": "https://YOUR_PROJECT_REF.supabase.co/functions/v1/bungie-stats",
+          "environmentVariables": {
+            "BUNGIE_API_KEY": "YOUR_BUNGIE_API_KEY",
+            "SUPABASE_URL": "https://YOUR_PROJECT_REF.supabase.co",
+            "SUPABASE_SERVICE_ROLE_KEY": "YOUR_SERVICE_ROLE_KEY"
+          }
+        }
+      ]
+    },
+    "database": {
+      "platform": "Supabase Postgres",
+      "tables": [
+        {
+          "name": "bungie_stats_cache",
+          "migration": "supabase/migrations/001_create_bungie_cache.sql"
+        }
+      ]
+    }
+  },
+  "instructions": {
+    "setup": "See SUPABASE_MIGRATION.md for complete step-by-step guide",
+    "cli": "supabase functions deploy bungie-stats",
+    "test": "Visit your profile page and connect Bungie.net"
+  }
+}
