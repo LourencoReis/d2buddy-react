@@ -36,25 +36,79 @@ Complete step-by-step guide to migrate your Bungie API integration from Vercel t
 
 ## Step 2: Set Up the Database Cache Table
 
-1. In your Supabase dashboard, click **"SQL Editor"** in the left sidebar
-2. Click **"New query"**
-3. Copy and paste the SQL from `supabase/migrations/001_create_bungie_cache.sql`:
+This creates a table in your Supabase database to store cached raid stats so your site loads instantly on repeat visits.
+
+### Detailed Instructions:
+
+1. **Go to your Supabase project dashboard**
+   - You should see your project name at the top
+   - In the left sidebar, you'll see a list of menu items
+
+2. **Open the SQL Editor**
+   - In the LEFT sidebar, scroll down and click on **"SQL Editor"**
+   - It has an icon that looks like `</>` 
+
+3. **Create a new query**
+   - You'll see a button that says **"+ New query"** in the top right area
+   - Click it
+   - A blank text editor will appear on the right side
+
+4. **Copy the SQL code**
+   - Open the file `supabase/migrations/001_create_bungie_cache.sql` from your project
+   - OR copy this code directly:
 
 ```sql
--- Create the cache table
 CREATE TABLE IF NOT EXISTS bungie_stats_cache (
   cache_key TEXT PRIMARY KEY,
   data JSONB NOT NULL,
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 
--- Create index on updated_at for cleanup queries
 CREATE INDEX IF NOT EXISTS idx_bungie_stats_cache_updated_at 
   ON bungie_stats_cache(updated_at);
 ```
 
-4. Click **"Run"** (bottom right)
-5. You should see "Success. No rows returned"
+5. **Paste it into the editor**
+   - Click inside the big text box on the right side
+   - Press `Ctrl+V` to paste
+   - You should now see the SQL code in the editor
+
+6. **Run the query**
+   - Look for a button in the bottom-right corner that says **"Run"** or **"RUN"**
+   - It might be a green or blue button
+   - Click it
+
+7. **Check for success**
+   - Below the editor, you should see a results panel
+   - If successful, it will show: **"Success. No rows returned"** in green
+   - This is GOOD - it means the table was created!
+
+8. **Verify the table exists (optional)**
+   - In the left sidebar, click **"Table Editor"**
+   - You should now see a table called **"bungie_stats_cache"** in the list
+   - Click on it - it should show 3 columns: `cache_key`, `data`, `updated_at`
+   - The table will be empty (0 rows) - that's normal!
+
+### What This Does:
+
+- Creates a table to store your Bungie stats temporarily
+- Each time someone loads their profile, it saves the results for 2 minutes
+- Next time they load the page (within 2 min), it shows instantly from the cache instead of calling Bungie again
+- This makes your site MUCH faster and avoids hitting Bungie's rate limits
+
+### Troubleshooting:
+
+**If you see "permission denied" or "error":**
+- Make sure you're in YOUR project (check the project name at the top)
+- Try refreshing the page and running the query again
+
+**If the Run button is grayed out:**
+- Make sure you pasted the SQL code into the editor
+- Click inside the text editor first, then try clicking Run
+
+**If you don't see "SQL Editor" in the sidebar:**
+- Scroll down in the left sidebar - it might be below "Database" section
+- Try refreshing the browser page
 
 ---
 
