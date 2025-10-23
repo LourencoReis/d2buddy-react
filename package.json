@@ -5,5 +5,7 @@
     "build": "cd frontend && npm install && npm run build",
     "dev": "cd frontend && npm start"
   },
-  "dependencies": {}
+  "dependencies": {
+    "supabase": "^2.53.6"
+  }
 }

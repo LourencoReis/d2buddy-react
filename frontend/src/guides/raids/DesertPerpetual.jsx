@@ -63,10 +63,10 @@ export default function DesertPerpetual(Epic) {
           <div className="encounter-card">
             <h3 className="encounter-title">Epoptes , Lord of Quanta</h3>
             <div className="encounter-content">
-              <p><strong>Objective:</strong> Break through the Cabal fortifications and establish a foothold in the Desert Perpetual.</p>
-              <p><strong>Strategy:</strong> Split into two teams of three. Each team must breach the left and right gates by defeating gatekeepers and dunking energy cores.</p>
-              <p><strong>Key Mechanics:</strong> Energy cores spawn after defeating elite Cabal. Carry them to the corresponding gate receptacles.</p>
-              <p><strong>Tips:</strong> Coordinate with your team before dunking cores to ensure both sides are ready.</p>
+              <p><strong>Objective:</strong> Break the lenses of the all-seeing choral vex hydra.</p>
+              <p><strong>Organisation of the team:</strong> To start you must split the 6 player team into 3 groups of 2. 2 people will be assigned to go into the room in the corner rooms. Left room and right room. The other 2 teammates will stay in the middle of the room.</p>
+              <p><strong>Roles-Outside team:</strong> The outside team for the most part will be ad clearing.However they are just as important both when it comes to making the arena safe and not overly dangerous.</p>
+              <p><strong>Roles-Inside rooms:</strong> Coordinate with your team before dunking cores to ensure both sides are ready.</p>
             </div>
           </div>
 

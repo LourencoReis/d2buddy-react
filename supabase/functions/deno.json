@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "lib": ["deno.window", "deno.unstable"],
+    "types": ["https://deno.land/x/deno/cli/tsc/dts/lib.deno.d.ts"]
+  },
+  "lint": {
+    "files": {
+      "exclude": ["node_modules"]
+    }
+  },
+  "fmt": {
+    "files": {
+      "exclude": ["node_modules"]
+    }
+  }
+}
