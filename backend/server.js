@@ -7,10 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
+// Allow frontend from any origin (Render/Vercel/custom domain)
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
 // Discord OAuth configuration
@@ -126,4 +124,144 @@ app.get('/api/user/profile', async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Backend server running on http://localhost:${PORT}`);
+});
+
+// =====================
+// Bungie: Raid counts
+// =====================
+
+// Minimal in-memory cache to keep responses snappy and under rate limits
+const CACHE = new Map();
+const CACHE_TTL_MS = 60 * 1000; // 60 seconds
+
+// Known raid hashes (director activity hash variants). Update as needed.
+const RAID_MAP = {
+  "Last Wish": [1661734046, 2122313384, 2214608154],
+  "Vault of Glass": [3881495763, 1441982566],
+  "Garden of Salvation": [3213556450, 2214608155],
+  "Deep Stone Crypt": [4148187374, 910380154],
+  "Vow of the Disciple": [1661734046, 4217492330],
+  "King's Fall": [2906950631, 3458480159],
+  "Root of Nightmares": [119944200],
+  "Crota's End": [2918919505, 4179289725],
+  "Salvation's Edge": [3976949817, 4130534029]
+};
+
+const ALL_RAID_HASHES = new Set(Object.values(RAID_MAP).flat());
+
+function withTimeout(promise, ms, label) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`Timeout: ${label} after ${ms}ms`)), ms)
+    ),
+  ]);
+}
+
+async function bungieGet(path, accessToken) {
+  const url = `https://www.bungie.net/Platform${path}`;
+  const res = await withTimeout(
+    axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'X-API-Key': process.env.BUNGIE_API_KEY || ''
+      },
+      timeout: 15000,
+      validateStatus: () => true,
+    }),
+    20000,
+    path
+  );
+
+  if (res.status < 200 || res.status >= 300) {
+    const body = typeof res.data === 'string' ? res.data : JSON.stringify(res.data);
+    throw new Error(`Bungie ${path} -> ${res.status}: ${body?.slice?.(0, 300)}`);
+  }
+  if (res.data && res.data.ErrorCode && res.data.ErrorCode !== 1) {
+    throw new Error(`Bungie ${path} error: ${res.data.Message || res.data.ErrorStatus}`);
+  }
+  return res.data.Response;
+}
+
+app.get('/api/stats-simple', async (req, res) => {
+  // CORS pre-set above
+  try {
+    if (!process.env.BUNGIE_API_KEY) {
+      return res.status(500).json({ error: 'BUNGIE_API_KEY not set on server' });
+    }
+
+    const authHeader = req.headers.authorization || '';
+    const accessToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
+    if (!accessToken) {
+      return res.status(401).json({ error: 'Missing Bearer token' });
+    }
+
+    // Who am I?
+    const memberships = await bungieGet('/User/GetMembershipsForCurrentUser/', accessToken);
+    const dm = (memberships.destinyMemberships || [])[0];
+    if (!dm) return res.status(404).json({ error: 'No Destiny memberships found' });
+
+    const cacheKey = `raidCounts:${dm.membershipType}:${dm.membershipId}`;
+    const cached = CACHE.get(cacheKey);
+    if (cached && Date.now() - cached.t < CACHE_TTL_MS) {
+      return res.status(200).json(cached.data);
+    }
+
+    // Character list (components=100 => Characters)
+    const profile = await bungieGet(
+      `/Destiny2/${dm.membershipType}/Profile/${dm.membershipId}/?components=100`,
+      accessToken
+    );
+    const charIds = Object.keys(profile.characters?.data || {});
+    if (charIds.length === 0) {
+      return res.status(404).json({ error: 'No characters found' });
+    }
+
+    // AggregateActivityStats per character
+    const charStats = await Promise.all(
+      charIds.map((cid) =>
+        bungieGet(
+          `/Destiny2/${dm.membershipType}/Account/${dm.membershipId}/Character/${cid}/Stats/AggregateActivityStats/`,
+          accessToken
+        ).catch(() => ({ activities: [] }))
+      )
+    );
+
+    const completionsByHash = new Map();
+    for (const cs of charStats) {
+      for (const a of cs.activities || []) {
+        const hash = a.activityHash ?? a.directorActivityHash;
+        if (!hash || !ALL_RAID_HASHES.has(hash)) continue;
+        const val =
+          a.values?.activityCompletions?.basic?.value ??
+          a.values?.activityCompletions?.value ??
+          a.values?.activityCompletions ?? 0;
+        completionsByHash.set(hash, (completionsByHash.get(hash) || 0) + (Number(val) || 0));
+      }
+    }
+
+    const raids = Object.entries(RAID_MAP).map(([name, hashes]) => {
+      const count = hashes.reduce((sum, h) => sum + (completionsByHash.get(h) || 0), 0);
+      return { name, completions: count };
+    });
+
+    const totalRaidCompletions = raids.reduce((s, r) => s + r.completions, 0);
+    const payload = {
+      raids,
+      summary: { totalRaidCompletions },
+      meta: {
+        membershipId: dm.membershipId,
+        membershipType: dm.membershipType,
+        cached: false,
+        at: new Date().toISOString(),
+        source: 'aggregate_activity_stats'
+      }
+    };
+
+    CACHE.set(cacheKey, { t: Date.now(), data: payload });
+    return res.status(200).json(payload);
+  } catch (err) {
+    console.error('Bungie stats error:', err?.message || err);
+    return res.status(500).json({ error: 'Failed to load raid counts', details: String(err?.message || err) });
+  }
 });

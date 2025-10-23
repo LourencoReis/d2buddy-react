@@ -49,7 +49,10 @@ export default function Profile() {
       console.log('Access token found, fetching stats...');
       setLoadingStats(true);
       
-      // Set a timeout for the stats fetch
+  // Build API base (supports external backend like Render)
+  const apiBase = process.env.REACT_APP_API_BASE || '';
+
+  // Set a timeout for the stats fetch
       const controller = new AbortController();
       const timeoutId = setTimeout(() => {
         controller.abort();
@@ -59,7 +62,7 @@ export default function Profile() {
       
       try {
         // Use relative URL to ensure it calls the same deployment we're on
-        const response = await fetch(`/api/stats-simple`, {
+        const response = await fetch(`${apiBase}/api/stats-simple`, {
           headers: {
             'Authorization': `Bearer ${data.accessToken}`,
           },
