@@ -214,6 +214,81 @@
   text-shadow: 0 0 4px rgba(255, 215, 0, 0.5);
 }
 
+/* Loot Item Styles */
+.loot-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.loot-item h4 {
+  color: #fff;
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.loot-item p {
+  color: #ccc;
+  margin: 0.25rem 0;
+  line-height: 1.4;
+}
+
+/* Loadout Card Styles */
+.loadout-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.loadout-card h3 {
+  color: #fff;
+  font-size: 1.4rem;
+  margin: 0 0 1rem 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.loadout-card p {
+  color: #ccc;
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+/* Tips List Styles */
+.tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tips-list li {
+  color: #ccc;
+  padding: 0.75rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  line-height: 1.6;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tips-list li:last-child {
+  border-bottom: none;
+}
+
+.tips-list li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.tips-list li strong {
+  color: #fff;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .guide-hero {

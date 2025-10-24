@@ -12,7 +12,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(30, 22, 60, 0.92);
+  background: #1b1436;
   padding: 1.5rem 2rem 1rem 2rem;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
@@ -56,7 +56,7 @@ body {
 }
 
 .cta-btn.purple:hover {
-  background: #4f8cff;
+  background:#8b7355eb ;
 }
 
 .cta-btn.dark {
@@ -599,7 +599,7 @@ body {
 }
 
 .sherpa-count {
-  color: #ffd700 !important;
+  color: #9f7aea !important;
   font-weight: bold;
 }
 
@@ -696,7 +696,7 @@ body {
 .nav-brand a {
   font-size: 1.5rem;
   font-weight: bold;
-  color:#ffdb58 ;
+  color:#9f7aea ;
   text-decoration: none;
 }
 
@@ -845,4 +845,9 @@ button, .btn {
 button:hover, .btn:hover {
   background: #805ad5;
   transform: translateY(-2px);
+}
+a {
+  color: #9f7aea;
+  text-decoration: none;
+  transition: color 0.3s;
 }

@@ -159,7 +159,9 @@ export default function VaultOfGlass() {
             </div>
             <div className="loot-encounter">
               <h4>Templar</h4>
-              <p>• Fatebringer • Vision of Confluence • Corrective Measure • Armor</p>
+              <a color='' href="https://www.light.gg/db/items/4184168210/fatebringer">Fatebringer   • Armor</a>
+              <a href="https://www.light.gg/db/items/3654744298/corrective-measure"> Corrective Measure</a>
+              <a href="https://www.light.gg/db/items/3654744298/corrective-measure">• Vision of Confluence</a>
             </div>
             <div className="loot-encounter">
               <h4>Gatekeeper</h4>

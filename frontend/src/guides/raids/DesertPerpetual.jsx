@@ -2,16 +2,26 @@ import React from "react";
 import PlayerStats from "../../components/PlayerStats";
 import '../../components/GuideStyles.css';
 
-export default function DesertPerpetual(Epic) {
+export default function DesertPerpetual({ 
+  heroImage = "/images/endcutscene.jpg",
+  title = "Desert Perpetual",
+  subtitle = "Fate's Beginning",
+  activitySlug = "desert-perpetual"
+}) {
   return (
     <main className="page-layout">
       <div 
         className="guide-hero"
-        style={{ backgroundImage: `url(/images/desertperp.jpg)` }}
+        style={{ 
+          backgroundImage: `url(${heroImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 40%',
+          backgroundAttachment: 'scroll'
+        }}
       >
         <div className="guide-hero-overlay">
-          <h1 className="guide-title">Desert Perpetual</h1>
-          <p className="guide-subtitle">Fate's Beginning</p>
+          <h1 className="guide-title">{title}</h1>
+          <p className="guide-subtitle">{subtitle}</p>
         </div>
       </div>
       
@@ -19,8 +29,8 @@ export default function DesertPerpetual(Epic) {
         {/* Player Stats Section */}
         <PlayerStats 
           activityType="raid"
-          activityName="Desert Perpetual"
-          activitySlug="desert-perpetual-(epic)"
+          activityName={title}
+          activitySlug={activitySlug}
         />
 
         {/* Lore Section */}
@@ -63,17 +73,79 @@ export default function DesertPerpetual(Epic) {
           <div className="encounter-card">
             <h3 className="encounter-title">Epoptes , Lord of Quanta</h3>
             <div className="encounter-content">
-              <p><strong>Objective:</strong> Break the lenses of the all-seeing choral vex hydra.</p>
+              <p><strong>To select the Epoptes encounter (often called "hydra") you must select the left path. Then you must go through its jumping puzzle and then you will arrive at the encounter.</strong>(Image below)</p>
+              <div className="encounter-image">
+                <img src="/images/selecthydra.jpg" alt="Epoptes selection" style={{ maxWidth: '600px' }} />
+              </div>
+              <p><strong>Objective:</strong> Break the lenses and defeat the all-seeing choral vex hydra.</p>
+              <p>As you walk in the arena you will notice there is a massive pit in the middle where the boss will be all the time.</p>
+              
+              <div className="encounter-image">
+                <img src="/images/hydraarena.jpg.png" alt="Arena overview" style={{ maxWidth: '600px' }} />
+              </div>
+
+              <p>However if you wonder in the left room and right room you will see that the boss is also there. If you look at it you will that it has a shield and some eyes in its shield. This is the main mechanic for the inside room which is explained a little later.
+              The hydra's lenses will be in both rooms.</p>
+              
+              <p><strong>Left Room:</strong> The left room will have a lens on the left side and a cyclops will spawn here.</p>
+              <div className="encounter-image">
+                <img src="/images/leftsideplatehydra.jpg" alt="Left room view" style={{ maxWidth: '400px' }} />
+              </div>
+              <p><strong>Right Room:</strong> The right room will have a lens on the right side and a cyclops will spawn here.</p>
+              <div className="encounter-image">
+                <img src="/images/rightsidehydraplate.jpg" alt="Right room view" style={{ maxWidth: '600px' }} />
+              </div>
+              <p>Before you go into each of the rooms you will see a bronze plate. This is important since this is the buff that will allow to destroy the lenses'es eyes in each room. You make this buff by eliminating the cyclops that spawn on each side.</p>
+              <div className="encounter-image">
+                <img src="/images/epoptesbuff2.jpg" alt="Epoptes main buff" style={{ maxWidth: '600px' }} />
+              </div>
+
               <p><strong>Organisation of the team:</strong> To start you must split the 6 player team into 3 groups of 2. 2 people will be assigned to go into the room in the corner rooms. Left room and right room. The other 2 teammates will stay in the middle of the room.</p>
-              <p><strong>Roles-Outside team:</strong> The outside team for the most part will be ad clearing.However they are just as important both when it comes to making the arena safe and not overly dangerous.</p>
-              <p><strong>Roles-Inside rooms:</strong> Coordinate with your team before dunking cores to ensure both sides are ready.</p>
+              <p><strong>Roles-Outside team:</strong> The outside team for the most part will be ad clearing.However they are just as important both when it comes to making the arena safe and not overly dangerous.After the inside team destroys 3 eyes the outside team will have to prepare themselves.The boss begins to do the wipe mechanic , the two members outside will have to quickly kill the cyclops and pick up the buff in the places on the left and right side.</p>
+              <p><strong>Roles-Inside rooms:</strong> Once both sides eliminate the cyclops both teams must run to the plates and make sure everyone gets a buff. However 2 players only really need the buff the other 2 just have the buff in case something goes wrong.
+              What you must do inside is the following: <br /> Run towards the side the epoptes'es lense is pointing to (you will that it shines light to, that is where you should stand.) In this room you will see that in some places in the wall you will see a diagram that resembles the eyes of the lens's shield.(image below)</p>
+              
+              <div className="encounter-image">
+                <img src="/images/wipemechanicinfoandseeingeyes.jpg" alt="Epoptes shield eyes diagram" style={{ maxWidth: '600px' }} />
+              </div>
+              
+              <p>Now that you are in front of the lens you must follow it around room so you're always looping the room while you are calling out the eyes that the right side room needs to destroy aswell as destroy the eyes that the other side tells you to destroy.
+                So the ideal thing is that you and the partner on the other side call out the most eyes you can before the boss does it's wipe mechanic.
+              </p>
+              <p><strong>What is the wipe mechanic?</strong> In this encounter the boss has many ways to eliminate your team. However one of those is supposed to happen and you must have teamwork to prevent it from happening.</p>
+              <div className="encounter-image">
+                <img src="/images/wipemechanicinfoandseeingeyesdraw.jpg" alt="Epoptes wipe mechanic" style={{ maxWidth: '600px' }} />
+              </div>
+              <p>In the bottom left of your screen, above your super ability text will show and there is a soundqueue.This is where the crucial part of the outside team comes.</p>
+              <p><strong>The outside must do:</strong> Kill the cyclops as fast as possible so they can also buff up. Walk towards the middle of the arena and read the same structure as they eye diagram the inside team sees.The members must assign themselves to calling for left and the other to right. This is CRUCIAL since this will be the key to preventing the wipe mechanic.</p>
+              <p><strong>So what does the outside team need to do to prevent the wipe mechanic?</strong> The outside team must each assign to call for left inside and call for right inside. The person on the left side of the obelisk will provide the call out for the right inside person, which eye to destroy on their set of eyes to prevent a wipe. The person outside will then go to the right side of obelisk and destroy the two eyes that their partner outside didn't call.</p>
+              <p> <strong>INSIDE TEAM : BE AWARE THAT WHEN SOMETHING LIKE LEFT OR RIGHT IS CALLED YOU MUST INTERPRET AS IF YOU WERE COMING FROM THE OUTSIDE OF THE ROOM!!!</strong></p>
+              
+              <div className="encounter-image">
+                <img src="/images/eyesoutside.jpg" alt="Epoptes final arena view" style={{ maxWidth: '600px' }} />
+              </div>
+              <p><strong>What must you do after?</strong>After the wipe mechanic is prevented you will have your buff you got at the plate revoked. The inside players must run outside , help their outside teammates eliminate the cyclops to make the buff re-appear in the plates. After this you must continue destroying the eyes until the biggest one , the middle one is the only one standing. </p>
+              <p><strong>What happens with the last eye?</strong>The last eye will end both the lenses. So make sure that the person shooting the eys on the other side also only has the middle eye left. If not keep calling out the eyes in the eye diagram in the inside rooms. Once both middle eyes are destroyed in the side rooms the lens will be defeated.</p>
+              <p><strong>Everyone must come out!</strong>Now that both lenses are destroyed the boss in the middle will have a similar mechanic. However it will be much quicker. Now that both side lenses are destroyed the boss will have a lens for each side. If you have the buff and finished left side you will be able to destroy one of the shields and the person that destroyed the lens on the other side will be able to destroy the other shield.</p>
+              <p><strong>DPS TIME! oh wait...</strong>Now everyone must gather up. Get close together , clear any remaining enemies.Now that both shields are destroyed the boss will start assigning random teamates until all of them destroy its shield. To destroy its regenerating shields like the ones that were up once both lenses were destroyed. You must look above your abilities and 2 members at random will be selected. You will see which shield you are assigned to because it will shine a light.Once you know which shield you are assigned to run to the front of it and walk with it as it will be rotating just like the lenses's shield.</p>
+              <p><strong>Make sure to bring weapons with high fire rate!</strong>The reason for this is that once the boss lingers for a little bit with the shields up and the players are ready the eyes that were destroyed in the lenses will appear again , but this time around you can shoot them you must shoot the middle one last to completly destroy the shield.<strong>MAKE SURE TO BE IN TIME FOR THE DESTROYING OF THE EYES , THIS IS CRITICAL SO THAT YOUR TEAM CAN DO PROPER DAMAGE TO THE BOSS.</strong></p>
+              <p><strong>Rince and repeat</strong>
+              If you are not able to 1 phase this boss the lenses will respawn in the side rooms and you then you repeat the whole process. </p>
+              <p><strong>Important call outs:</strong></p>
+              <ul>
+                <li>Call outs to prevent wipe mechanic: left , top or bottom</li>
+                <li>Call out for eyes:Top left , top mid , top right , mid left , mid right , bottom left , bottom mid , bottom right</li>
+                <li>Cyclops spawning</li>
+                <li>Let's buff up/Pick up buff/Come to plate for buff</li>
+              </ul>
+              <p><strong>Important note:</strong> Communication is key! Make sure to call out your actions clearly and listen for your teammates' calls.</p>
+              <p><strong>Extra tips:</strong>Make sure to have a teamate on debuffing duty , ideally a warlock player to use their song of flame super or well of radiance to provide protection and damage buffs to the team. If you really want to optimize damage have a few titans usint the thundercrash super with the storm's keep aspect to generate bolt charge for the extra damage for the whole team.</p>
             </div>
           </div>
-
           <div className="encounter-card">
-            <h3 className="encounter-title">Agarios ,  Inherent</h3>
+            <h3 className="encounter-title">Agraios ,  Inherent</h3>
             <div className="encounter-content">
-              <p><strong>Objective:</strong> Navigate the temporal maze while managing debuffs and maintaining arena stability.</p>
+              <p><strong>Objective:</strong> Successfully destroy Agarios,</p>
               <p><strong>Roles:</strong> 2 Runners, 2 Add Clear, 2 Plate Holders</p>
               <p><strong>Strategy:</strong> Runners retrieve time crystals and deliver them to plates. Plate holders stand on pressure plates to stabilize the arena.</p>
               <p><strong>Key Mechanic:</strong> The arena shifts between timelines periodically. Adapt your positioning accordingly.</p>
@@ -95,7 +167,7 @@ export default function DesertPerpetual(Epic) {
           </div>
 
           <div className="encounter-card">
-            <h3 className="encounter-title">Koregos , thw Wordline</h3>
+            <h3 className="encounter-title">Koregos , the Wordline</h3>
             <div className="encounter-content">
               <p><strong>Objective:</strong> Defeat Dominus Khazul and prevent the Desert Perpetual's power from being unleashed.</p>
               
@@ -115,7 +187,7 @@ export default function DesertPerpetual(Epic) {
 
         {/* Loot Table */}
         <section className="guide-section">
-          <h2 className="section-title">🎁 Loot & Rewards</h2>
+          <h2 className="section-title">🎁 Loot Table</h2>
           <div className="loot-table">
             <div className="loot-item">
               <h4>Scorching Verdict</h4>
@@ -157,33 +229,33 @@ export default function DesertPerpetual(Epic) {
             <p><strong>Exotic Armor:</strong> Phoenix Protocol or Lunafaction Boots</p>
             <p><strong>Weapons:</strong></p>
             <ul className="tips-list">
-              <li>Kinetic: Witherhoard or Scout Rifle</li>
-              <li>Energy: Solar/Arc weapons for shields</li>
-              <li>Heavy: Linear Fusion Rifle or Rocket Launcher</li>
+              <li>Kinetic: Mint Retrograde or Outbreak Perfected </li>
+              <li>Energy: ad clear weapons Or sniper (for Koregos specific role)</li>
+              <li>Heavy: Tractor Cannon or Legend of Acrius (Iatros encounter only)</li>
             </ul>
           </div>
 
           <div className="loadout-card">
-            <h3>Hunter</h3>
-            <p><strong>Subclass:</strong> Nightstalker (Void) with Mobius Quiver or Gunslinger</p>
-            <p><strong>Exotic Armor:</strong> Orpheus Rig or Celestial Nighthawk</p>
+            <h3>Hunter <strong>(NOTE THAT THIS CLASS IS HEAVILY HANDICAPPED IN THIS RAID. However if you do decide to play as hunter)</strong></h3>
+            <p><strong>Subclass:</strong> Gunslinger or Prismatic </p>
+            <p><strong>Exotic Armor:</strong> Star-eater scales (for orb generation to provide more supers for your team) Relativsm (Spirit of the Cyrtarachne)</p>
             <p><strong>Weapons:</strong></p>
             <ul className="tips-list">
-              <li>Kinetic: Sniper Rifle or Hand Cannon</li>
-              <li>Energy: Fusion Rifle or Trace Rifle</li>
-              <li>Heavy: Linear Fusion or Rocket Launcher</li>
+              <li>Kinetic: Sniper Rifle(for koregos) or Mint Retrograde</li>
+              <li>Energy: Fusion Rifle or Trace Rifle or sniper (for Koregos specific role)</li>
+              <li>Heavy: Machine gun (for ad clear) or Rocket Launcher</li>
             </ul>
           </div>
 
           <div className="loadout-card">
             <h3>Titan</h3>
-            <p><strong>Subclass:</strong> Sentinel (Void) with Ward of Dawn for team buff</p>
-            <p><strong>Exotic Armor:</strong> Heart of Inmost Light or Helm of Saint-14</p>
+            <p><strong>Subclass:</strong> Striker (Arc) Thundercrash super for dps or Berserker(Strand) for melee damage in Iatros encounter</p>
+            <p><strong>Exotic Armor:</strong> Cuirass of the falling star(for arc) or Wishful Ignorance(Strand)</p>
             <p><strong>Weapons:</strong></p>
             <ul className="tips-list">
-              <li>Kinetic: Auto Rifle or Pulse Rifle</li>
-              <li>Energy: Shotgun for close-range adds</li>
-              <li>Heavy: Machine Gun or Linear Fusion</li>
+              <li>Kinetic: Mint Retrograde or Outbreak Perfected</li>
+              <li>Energy: Antedate(for peacekeepers dps) or regular ad clearing weapons</li>
+              <li>Heavy: Machine Gun(for ad-clearing) or Rocket Launcher or Legend of Acrius(iatros) or Finality's auger (for peacekeeper rotation)</li>
             </ul>
           </div>
         </section>
@@ -192,13 +264,27 @@ export default function DesertPerpetual(Epic) {
         <section className="guide-section">
           <h2 className="section-title">💡 Pro Tips</h2>
           <ul className="tips-list">
-            <li><strong>Communication:</strong> Clear callouts are essential, especially during War Council.</li>
-            <li><strong>Element Coverage:</strong> Ensure your fireteam has Solar and Arc weapons for shields.</li>
+            <li><strong>Communication:</strong> Clear callouts are essential, especially during the set up for damage phases.</li>
+            <li><strong>Team composition:</strong> Ensure your fireteam has member that always focuses on webuffing bosses,titans using cuirass of the falling star with thundercrash and ammmo economy damage choices.</li>
             <li><strong>Jump Timing:</strong> Practice jumping over fire waves during boss DPS.</li>
             <li><strong>Stay Together:</strong> Group up in the Temporal Well for damage buffs during boss phase.</li>
             <li><strong>Add Management:</strong> Don't ignore adds during boss fight - they can overwhelm you quickly.</li>
             <li><strong>Use Rally Banners:</strong> Always rally before each encounter to have full ammo and super.</li>
             <li><strong>Learn Patterns:</strong> Boss mechanics follow patterns - learn them to improve consistency.</li>
+          </ul>
+        </section>
+        <section className="guide-section">
+          <h2 className="section-title">
+            <img src="/images/helmet.png" alt="" style={{ width: '24px', height: '24px', marginRight: '8px', verticalAlign: 'middle' }} />
+            Greek References in this raid
+          </h2>
+          <ul className="tips-list">
+            <li> Agraios(Άγριος) - Represents the concept of the primal forces of nature.</li>
+            <li>Koregos( Χορηγός) - Symbolizes the connection between time and space.</li>
+            <li>Chronos ( Χρόνος) - Embodies the relentless passage of time.</li>
+            <li>Iatros ( Iατρός) - Represents the healing aspect of time.</li>
+            <li>Epoptes( Eπόπτης) - Symbolizes the all-seeing aspect of time.</li>
+            <li>Diastole ( Διαστολή)- In Iatros's encounter there is a mechanic that involves the heart expanding and contracting.</li>
           </ul>
         </section>
       </div>
